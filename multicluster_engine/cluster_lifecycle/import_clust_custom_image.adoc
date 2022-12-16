@@ -1,9 +1,10 @@
 [#imp-clust-custom-image-override]
 = Importing a cluster with a custom ManagedClusterImageRegistry CRD
 
-There might be times when you need to override the registry images on the managed clusters that you are importing. You can do this by creating a `ManagedClusterImageRegistry` custom resource definition (CRD). 
+There might be times when you need to override the registry images on the managed clusters that you are importing. You can do this by creating a `ManagedClusterImageRegistry` custom resource definition (CRD).
 
 The `ManagedClusterImageRegistry` CRD is a namespace-scoped resource.
+// 14. Do we need a section on the how to use ManagedClusterImageRegistry CRD?
 
 The `ManagedClusterImageRegistry` CRD specifies a set of managed clusters for a Placement to select, but needs different images from the custom image registry. After the managed clusters are updated with the new images, the following label is added to each managed cluster for identification: `open-cluster-management.io/image-registry=<namespace>.<managedClusterImageRegistryName>`.
 
@@ -20,7 +21,7 @@ spec:
   placementRef:
     group: cluster.open-cluster-management.io
     resource: placements
-    name: <placementName> 
+    name: <placementName>
   pullSecret:
     name: <pullSecretName>
   registries:
@@ -34,7 +35,7 @@ In the `spec` section:
 
 * Replace `placementName` with the name of a Placement in the same namespace that selects a set of managed clusters.
 * Replace `pullSecretName` with the name of the pull secret that is used to pull images from the custom image registry.
-* List the values for each of the `source` and `mirror` registries. Replace the `mirrored-image-registry-address` and `image-registry-address` with the value for  each of the `mirror` and `source` values of the registries. 
+* List the values for each of the `source` and `mirror` registries. Replace the `mirrored-image-registry-address` and `image-registry-address` with the value for  each of the `mirror` and `source` values of the registries.
 +
 ** Example 1: To replace the source image registry named `registry.redhat.io/rhacm2` with `localhost:5000/rhacm2`, and `registry.redhat.io/multicluster-engine` with `localhost:5000/multicluster-engine`, use the following example:
 +
@@ -59,7 +60,7 @@ registries:
 [#imp-clust-managedclusterimageregistry]
 == Importing a cluster with a ManagedClusterImageRegistry CRD
 
-Complete the following steps to import a cluster with a ManagedClusterImageRegistry CRD: 
+Complete the following steps to import a cluster with a ManagedClusterImageRegistry CRD:
 
 . Create a pull secret in the namespace where you want your cluster to be imported. For these steps, it is `myNamespace`.
 +
@@ -87,7 +88,7 @@ spec:
     operator: Exists
 ----
 +
-*Note:* The `unreachable` toleration is required for the Placement to be able to select the cluster. 
+*Note:* The `unreachable` toleration is required for the Placement to be able to select the cluster.
 
 . Create a `ManagedClusterSet` resource and bind it to your namespace.
 +
@@ -97,7 +98,7 @@ apiVersion: cluster.open-cluster-management.io/v1beta2
 kind: ManagedClusterSet
 metadata:
   name: myClusterSet
-  
+
 ---
 apiVersion: cluster.open-cluster-management.io/v1beta2
 kind: ManagedClusterSetBinding
@@ -130,3 +131,4 @@ spec:
 . Import a managed cluster from the console and add it to a managed cluster set.
 
 . Copy and run the import commands on the managed cluster after the label `open-cluster-management.io/image-registry=myNamespace.myImageRegistry` is added to the managed cluster.
+// 15. This section's name is confusing. First, I thought we can use the CRD to import a cluster, but at the last step, it goes back to the console.

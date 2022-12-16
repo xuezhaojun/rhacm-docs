@@ -11,11 +11,12 @@ After you install {mce}, you are ready to import a cluster to manage by using th
 * <<importing-the-klusterlet,Importing the klusterlet>>
 
 *Important:* A hub cluster cannot manage a different hub cluster. A hub cluster is set up to automatically import and manage itself. You do not have to manually import a hub cluster to manage itself. However, if you remove a hub cluster and try to import it again, you need to add the `local-cluster:true` label.
+// 12. I think a `otherwise` with a error situation could help customer locate the problem.
 
 [#cli-prerequisites]
 == Prerequisites
 
-* You need a hub cluster that is deployed. If you are importing bare metal clusters, you must have the hub cluster installed on {ocp} version 4.6 or later. 
+* You need a hub cluster that is deployed. If you are importing bare metal clusters, you must have the hub cluster installed on {ocp} version 4.6 or later.
 * You need a separate cluster that you want to manage that has Internet connectivity.
 * You need the {ocp} CLI version 4.6 or later, to run `oc` commands. See https://access.redhat.com/documentation/en-us/openshift_container_platform/4.10/html/cli_tools/openshift-cli-oc#cli-getting-started[Getting started with the OpenShift CLI] for information about installing and configuring the {ocp} CLI, `oc`. Download the installation file for CLI tools from the console.
 * You need to install the Kubernetes CLI, `kubectl`. To install `kubectl`, see _Install and Set Up kubectl_ in the https://kubernetes.io/docs/tasks/tools/install-kubectl/[Kubernetes documentation].
@@ -78,13 +79,13 @@ Continue with <<importing-the-cluster-auto-import-secret,Importing the cluster w
 [#importing-the-cluster-auto-import-secret]
 == Importing the cluster with the auto import secret
 
-To import with the auto import secret, you must create a secret that contains either a reference to the `kubeconfig` file of the cluster or the kube API server and token pair of the cluster. 
+To import with the auto import secret, you must create a secret that contains either a reference to the `kubeconfig` file of the cluster or the kube API server and token pair of the cluster.
 
 . Retrieve the `kubeconfig` file or the kube API server and token of the cluster that you are importing. See the documentation for your Kubernetes cluster to learn where to locate your `kubeconfig` file or your kube API server and token.
 
 . Create the `auto-import-secret.yaml` file in the ${CLUSTER_NAME} namespace.
 +
-.. Create a YAML file named `auto-import-secret.yaml` that contains content that is similar to the following template: 
+.. Create a YAML file named `auto-import-secret.yaml` that contains content that is similar to the following template:
 +
 [source,yaml]
 ----
@@ -187,8 +188,9 @@ Continue with <<importing-the-klusterlet,Importing the klusterlet>>.
 == Importing the klusterlet
 
 You can create and apply the klusterlet add-on configuration file by completing the following procedure:
+// 13. Add a link to the klusterlet addon config doc.
 
-. Create a YAML file that is similar to the following example: 
+. Create a YAML file that is similar to the following example:
 +
 [source,yaml]
 ----
@@ -220,7 +222,7 @@ oc apply -f klusterlet-addon-config.yaml
 +
 The ManagedCluster-Import-Controller will generate a secret named `+${CLUSTER_NAME}-import+`. The `+${CLUSTER_NAME}-import+` secret contains the `import.yaml` that the user applies to a managed cluster to install klusterlet.
 +
-Add-ons are installed after the cluster you are importing is `AVAILABLE`. 
+Add-ons are installed after the cluster you are importing is `AVAILABLE`.
 
 . Validate the pod status of add-ons on the cluster you are importing by running the following command:
 +

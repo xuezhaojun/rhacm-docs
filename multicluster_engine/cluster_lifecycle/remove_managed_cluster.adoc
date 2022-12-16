@@ -8,10 +8,10 @@ The following procedures remove a cluster from management in either of the follo
 * You already deleted the cluster and want to remove the deleted cluster from {product-title-short}.
 * You want to remove the cluster from management, but have not deleted the cluster.
 
-*Important:* 
+*Important:*
 
 - Destroying a cluster removes it from management and deletes the components of the cluster.
-- When you detach a managed cluster, the related namespace is automatically deleted. Do not place custom resources in this namespace. 
+- When you detach a managed cluster, the related namespace is automatically deleted. Do not place custom resources in this namespace.
 
 * <<remove-a-cluster-by-using-the-console,Removing a cluster by using the console>>
 * <<remove-a-cluster-by-using-the-cli,Removing a cluster by using the command line>>
@@ -25,8 +25,9 @@ The following procedures remove a cluster from management in either of the follo
 From the navigation menu, navigate to *Infrastructure* > *Clusters* and select *Destroy cluster* or *Detach cluster* from the options menu beside the cluster that you want to remove from management.
 +
 *Tip:* You can detach or destroy multiple clusters by selecting the check boxes of the clusters that you want to detach or destroy and selecting *Detach* or *Destroy*.
+// 16. Can we give some scenarios of when to use which?
 
-*Note:* If you attempt to detach the hub cluster while it is managed, which is called a `local-cluster`, check to see if the default setting of `disableHubSelfManagement` is `false`. This setting causes the hub cluster to reimport itself and manage itself when it is detached, and it reconciles the `MultiClusterHub` controller. It might take hours for the hub cluster to complete the detachment process and reimport. 
+*Note:* If you attempt to detach the hub cluster while it is managed, which is called a `local-cluster`, check to see if the default setting of `disableHubSelfManagement` is `false`. This setting causes the hub cluster to reimport itself and manage itself when it is detached, and it reconciles the `MultiClusterHub` controller. It might take hours for the hub cluster to complete the detachment process and reimport.
 
 To reimport the hub cluster without waiting for the processes to finish, you can enter the following command to restart the `multiclusterhub-operator` pod and reimport faster:
 
@@ -39,7 +40,7 @@ You can change the value of the hub cluster to not import automatically by chang
 [#remove-a-cluster-by-using-the-cli]
 == Removing a cluster by using the command line
 
-To detach a managed cluster by using the command line of the hub cluster, run the following command: 
+To detach a managed cluster by using the command line of the hub cluster, run the following command:
 
 ----
 oc delete managedcluster $CLUSTER_NAME
@@ -64,9 +65,9 @@ You can change the value of the hub cluster to not import automatically by chang
 
 If there are remaining resources on the managed cluster that you removed, there are additional steps that are required to ensure that you remove all of the remaining components. Situations when these extra steps are required include the following examples:
 
-* The managed cluster was detached before it was completely created, and components like the `klusterlet` remain on the managed cluster. 
+* The managed cluster was detached before it was completely created, and components like the `klusterlet` remain on the managed cluster.
 
-* The hub that was managing the cluster was lost or destroyed before detaching the managed cluster, and there is no way to detach the managed cluster from the hub. 
+* The hub that was managing the cluster was lost or destroyed before detaching the managed cluster, and there is no way to detach the managed cluster from the hub.
 
 * The managed cluster was not in an online state when it was detached.
 
@@ -74,7 +75,7 @@ If one of these situations apply to your attempted detachment of a managed clust
 
 . Make sure you have the `oc` command line interface configured.
 . Make sure you have `KUBECONFIG` configured on your managed cluster.
-+ 
++
 If you run `oc get ns | grep open-cluster-management-agent`, you should see two namespaces:
 +
 ----
@@ -91,7 +92,7 @@ oc get crds | grep open-cluster-management.io | awk '{print $1}' | xargs oc dele
 oc get crds | grep open-cluster-management.io | awk '{print $1}' | xargs oc patch crds --type=merge -p '{"metadata":{"finalizers": []}}'
 ----
 
-. Run the following command to ensure that both namespaces and all open cluster management `crds` are removed: 
+. Run the following command to ensure that both namespaces and all open cluster management `crds` are removed:
 +
 ----
 oc get crds | grep open-cluster-management.io | awk '{print $1}'
